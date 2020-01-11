@@ -1,5 +1,15 @@
 # Geode Demo
 
+### how to run
+```
+gradle task:
+
+getTar(down load geode tgz)
+installGeode(unzip)
+cleanWorkingDir
+start
+stop
+
 ```
 
 ## simpleIndex uses default Lucene StandardAnalyzer

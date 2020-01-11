@@ -1,12 +1,22 @@
-def geodeHome = "C:/Users/kenneth/geode/apache-geode-${geodeVersion}"
 def geodeUrl = "http://mirrors.tuna.tsinghua.edu.cn/apache/geode/${geodeVersion}/apache-geode-${geodeVersion}.tgz"
+//https://mirrors.tuna.tsinghua.edu.cn/apache/geode/1.10.0/apache-geode-1.10.0.tgz
 
-//task installGeode(type: Copy) {
-//  from tarTree("$geodeUrl")
-//  into 'C:/Users/kenneth/geode/'
-//}
+def installDir = "C:/Users/kenneth/geode"
+def geodeHome = "${installDir}/apache-geode-${geodeVersion}"
+def locator = 'localhost[10334]'
 
-task cleanServer(group: 'geode') {
+task getTar(type: Download) {
+  src geodeUrl
+  dest installDir
+}
+
+task installGeode(type: Copy) {
+  from tarTree("${installDir}/apache-geode-${geodeVersion}.tgz")
+  into "${installDir}"
+
+}
+
+task cleanWorkingDir(group: 'geode') {
   doLast {
     def collection = layout.files { file("${projectDir}").listFiles() }
     def names = collection.filter { it.name.contains('locator') || it.name.contains('server') }.collect { it.name }
@@ -14,11 +24,11 @@ task cleanServer(group: 'geode') {
   }
 }
 
-//http://localhost:7070/pulse/clusterDetail.html 
+//http://localhost:7070/pulse/clusterDetail.html
 //http://localhost:8888/geode/swagger-ui.html  ,'CLASSPATH': "${buildDir}/classes/java/main"
-task start(type: Exec, group: 'geode', dependsOn: [build, cleanServer]) {
+task start(type: Exec, group: 'geode', dependsOn: [build, cleanWorkingDir]) {
   workingDir projectDir
-  environment += ['GEODE_HOME': geodeHome,'PATH': geodeHome]
+  environment += ['GEODE_HOME': geodeHome, 'PATH': geodeHome]
   executable "${geodeHome}/bin/gfsh.bat"
   args "run --file=${projectDir}/scripts/start.sh"
 }
@@ -37,7 +47,7 @@ task stopNode(type: Exec, group: 'geode', dependsOn: [build]) {
   environment 'GEODE_HOME', geodeHome
   environment 'PATH', geodeHome
   executable "${geodeHome}/bin/gfsh.bat"
-  args = ["-e connect --locator=127.0.0.1[10334]", "-e stop server --name=geo_server2"]
+  args = ["-e connect --locator=${locator}", "-e stop server --name=geo_server2"]
 }
 
 task exeGfsh(type: Exec, group: 'geode', dependsOn: [build]) {
@@ -45,7 +55,7 @@ task exeGfsh(type: Exec, group: 'geode', dependsOn: [build]) {
   environment 'GEODE_HOME', geodeHome
   environment 'PATH', geodeHome
   executable "${geodeHome}/bin/gfsh.bat"
-  args = ["-e connect --locator=127.0.0.1[10334]", 
+  args = ["-e connect --locator=${locator}",
           "-e list lucene indexes"]
 //          "-e "]
 }
