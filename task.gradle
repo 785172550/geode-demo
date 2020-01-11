@@ -60,6 +60,14 @@ task exeGfsh(type: Exec, group: 'geode', dependsOn: [build]) {
 //          "-e "]
 }
 
+task kill(type: Exec, group: 'geode', dependsOn: [build]) {
+  workingDir projectDir
+  environment 'GEODE_HOME', geodeHome
+  environment 'PATH', geodeHome
+  executable "tskill"
+  args '9356'
+}
+
 task testRun() {
   doLast {
 

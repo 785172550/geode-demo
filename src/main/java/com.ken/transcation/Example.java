@@ -53,7 +53,7 @@ public class Example {
   public static void main(String[] args) {
     // connect to the locator using default port 10334
     ClientCache cache = CacheUtils.plainClient();
-    Region<String, Integer> region = CacheUtils.getRegion("Counter");
+    Region<String, Integer> region = CacheUtils.getRegion(REGION_NAME);
 
     Example example = new Example(region);
     example.initializeEntry();

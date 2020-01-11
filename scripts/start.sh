@@ -19,9 +19,10 @@ start server --name=geo_server1 --locators=127.0.0.1[10334] --bind-address=127.0
 #--J=-Dgemfire.QueryService.allowUntrustedMethodInvocation=true --J=-Dlog4j.configurationFile=../config/log4j2.xml \
 #--server-port=40002
 
-list members
-list region
+#list members
+#list region
 list index
+list lucene indexes
 
 ####### commemt
 # --security-properties-file=config/local/security.properties
