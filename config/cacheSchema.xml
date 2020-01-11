@@ -49,7 +49,7 @@
         <partition-attributes redundant-copies="1" recovery-delay="10000" startup-recovery-delay="5000" total-num-buckets="3"/>
     </region-attributes>
 
-
+    <region name="Lock" refid="replicated_ds"/>
     <region name="Country" refid="replicated_ds"/>
     <region name="School" refid="replicated_ds"/>
     <region name="Student">
@@ -72,6 +72,7 @@
                 <class-name>org.apache.geode.cache.lucene.FlatFormatSerializer</class-name>
             </lucene:serializer>
         </lucene:index>
+        <index name="myKeyIndex" from-clause="/EmployeeData" expression="id" key-index="true"/>
         <!--        <index name=""></index>-->
     </region>
 
