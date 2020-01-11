@@ -1,0 +1,57 @@
+def geodeHome = "C:/Users/kenneth/geode/apache-geode-${geodeVersion}"
+def geodeUrl = "http://mirrors.tuna.tsinghua.edu.cn/apache/geode/${geodeVersion}/apache-geode-${geodeVersion}.tgz"
+
+//task installGeode(type: Copy) {
+//  from tarTree("$geodeUrl")
+//  into 'C:/Users/kenneth/geode/'
+//}
+
+task cleanServer(group: 'geode') {
+  doLast {
+    def collection = layout.files { file("${projectDir}").listFiles() }
+    def names = collection.filter { it.name.contains('locator') || it.name.contains('server') }.collect { it.name }
+    names.each { delete it }
+  }
+}
+
+//http://localhost:7070/pulse/clusterDetail.html 
+//http://localhost:8888/geode/swagger-ui.html  ,'CLASSPATH': "${buildDir}/classes/java/main"
+task start(type: Exec, group: 'geode', dependsOn: [build, cleanServer]) {
+  workingDir projectDir
+  environment += ['GEODE_HOME': geodeHome,'PATH': geodeHome]
+  executable "${geodeHome}/bin/gfsh.bat"
+  args "run --file=${projectDir}/scripts/start.sh"
+}
+
+task stop(type: Exec, group: 'geode', dependsOn: [build]) {
+  workingDir projectDir
+  environment 'GEODE_HOME', geodeHome
+  environment 'PATH', geodeHome
+  executable "${geodeHome}/bin/gfsh.bat"
+  args "run --file=${projectDir}/scripts/stop.sh"
+//  args = ["-e connect --locator=127.0.0.1[10334]", "-e shutdown --include-locators=true"]
+}
+
+task stopNode(type: Exec, group: 'geode', dependsOn: [build]) {
+  workingDir projectDir
+  environment 'GEODE_HOME', geodeHome
+  environment 'PATH', geodeHome
+  executable "${geodeHome}/bin/gfsh.bat"
+  args = ["-e connect --locator=127.0.0.1[10334]", "-e stop server --name=geo_server2"]
+}
+
+task exeGfsh(type: Exec, group: 'geode', dependsOn: [build]) {
+  workingDir projectDir
+  environment 'GEODE_HOME', geodeHome
+  environment 'PATH', geodeHome
+  executable "${geodeHome}/bin/gfsh.bat"
+  args = ["-e connect --locator=127.0.0.1[10334]", 
+          "-e list lucene indexes"]
+//          "-e "]
+}
+
+task testRun() {
+  doLast {
+
+  }
+}

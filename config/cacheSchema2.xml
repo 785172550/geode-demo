@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://geode.apache.org/schema/cache"
+       xsi:schemaLocation="http://geode.apache.org/schema/cache http://geode.apache.org/schema/cache/cache-1.0.xsd" version="1.0" lock-lease="120"
+       lock-timeout="60" search-timeout="300" is-server="false" copy-on-read="false">
+
+    <disk-store name="DEFAULT" auto-compact="true" max-oplog-size="1024">
+        <disk-dirs>
+            <disk-dir>../data/node2/ds1</disk-dir>
+        </disk-dirs>
+    </disk-store>
+    <disk-store name="ds2" auto-compact="true" max-oplog-size="1024">
+        <disk-dirs>
+            <disk-dir>../data/node2/ds2</disk-dir>
+        </disk-dirs>
+    </disk-store>
+
+    <pdx read-serialized="true" persistent="true">
+        <pdx-serializer>
+            <class-name>org.apache.geode.pdx.ReflectionBasedAutoSerializer</class-name>
+            <parameter name="classes">
+                <string>com.ken.domain.*</string>
+            </parameter>
+            <parameter name="check-portability">
+                <string>false</string>
+            </parameter>
+        </pdx-serializer>
+    </pdx>
+
+    <region-attributes id="replicated_ds" scope="global" disk-store-name="DEFAULT"
+                       disk-synchronous="true" data-policy="persistent-replicate">
+        <!--            <entry-time-to-live>-->
+        <!--                <expiration-attributes timeout="60" action="destroy">-->
+        <!--                    <custom-expiry>-->
+        <!--                        <class-name>com.ken.handler</class-name>-->
+        <!--                        <parameter name="numOfDay">-->
+        <!--                            <string>30</string>-->
+        <!--                        </parameter>-->
+        <!--                    </custom-expiry>-->
+        <!--                </expiration-attributes>-->
+        <!--            </entry-time-to-live>-->
+    </region-attributes>
+
+    <region-attributes id="partition_ds" refid="PARTITION_PERSISTENT" disk-store-name="ds2" disk-synchronous="true" data-policy="persistent-partition">
+        <partition-attributes redundant-copies="1" recovery-delay="10000" startup-recovery-delay="5000" total-num-buckets="3"/>
+    </region-attributes>
+
+
+    <region name="Country" refid="replicated_ds"/>
+    <region name="School" refid="replicated_ds"/>
+    <region name="Student">
+        <region-attributes refid="replicated_ds">
+        </region-attributes>
+    </region>
+
+    <region name="EmployeeData" refid="replicated_ds">
+        <region-attributes index-update-type="asynchronous">
+        </region-attributes>
+    </region>
+
+</cache>

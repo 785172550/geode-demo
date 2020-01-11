@@ -1,0 +1,46 @@
+plugins {
+  id 'java'
+}
+apply from: "task.gradle"
+
+group 'com.ken'
+version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+def geodeHome = "C:/Users/kenneth/geode/apache-geode-${geodeVersion}"
+
+repositories {
+  mavenLocal()
+  maven {
+    url "http://maven.aliyun.com/nexus/content/groups/public/"
+  }
+  maven {
+    url "http://maven.aliyun.com/nexus/content/repositories/jcenter"
+  }
+  maven {
+    url 'https://storage.googleapis.com/maven.apachegeode-ci.info/snapshots'
+  }
+  mavenCentral()
+}
+
+
+dependencies {
+
+  annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+  compileOnly "org.projectlombok:lombok:${lombokVersion}"
+
+//  compile "org.apache.geode:geode-core:$geodeVersion"
+//  compile "org.apache.geode:geode-cq:$geodeVersion"
+//  compile "org.apache.geode:geode-lucene:$geodeVersion"
+
+  compile fileTree(dir: "${geodeHome}/lib", includes: ["*.jar"])
+  compile 'com.google.guava:guava:25.1-jre'
+  compile "org.slf4j:slf4j-api:1.7.25"
+
+  compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
+  runtime "org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion"
+
+  testCompile "org.mockito:mockito-core:$mockitocoreVersion"
+  testCompile "com.github.stefanbirkner:system-rules:$systemrulesVersion"
+  testCompile "org.assertj:assertj-core:$assertjVersion"
+  testCompile "junit:junit:$junitVersion"
+}

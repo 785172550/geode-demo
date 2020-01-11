@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<client-cache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns="http://geode.apache.org/schema/cache"
+              xsi:schemaLocation="http://geode.apache.org/schema/cache http://geode.apache.org/schema/cache/cache-1.0.xsd"
+              version="1.0">
+
+    <pool name="clientPool" subscription-enabled="true" read-timeout="120000000" max-connections="10">
+        <locator host="localhost" port="10334"/>
+        <!--        <locator host="oceanap01d.nam.nsroot.net" port="10334"/>-->
+        <!--        <server host="oceanap01d.nam.nsroot.net" port="30333"/>-->
+        <!--        <server host="oceanap02d.nam.nsroot.net" port="30334"/>-->
+    </pool>
+
+    <pdx>
+        <pdx-serializer>
+            <class-name>org.apache.geode.pdx.ReflectionBasedAutoSerializer</class-name>
+            <parameter name="classes">
+                <string>com.ken.domain.*</string>
+            </parameter>
+            <parameter name="check-portability">
+                <string>false</string>
+            </parameter>
+        </pdx-serializer>
+    </pdx>
+
+    <region-attributes id="PROXY1" refid="PROXY" pool-name="clientPool"/>
+    <region name="Country" refid="PROXY1"/>
+    <region name="School" refid="PROXY1"/>
+    <region name="Student" refid="PROXY1"/>
+    <region name="EmployeeData" refid="PROXY1"/>
+
+</client-cache>

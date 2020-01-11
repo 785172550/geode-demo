@@ -1,0 +1,4 @@
+#!/bin/sh
+
+connect --locator=127.0.0.1[10334]
+shutdown --include-locators=true
