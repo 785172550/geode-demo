@@ -31,7 +31,7 @@ public class LuceneDemo {
     // create a local region that matches the server region
     Region<Integer, EmployeeData> region = CacheUtils.getRegion(EmployeeRegion);
 
-//    insertValues(region);
+    insertValues(region);
 //    query(cache);
     queryNestedObject(cache);
     cache.close();

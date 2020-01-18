@@ -1,11 +1,11 @@
 #!/bin/sh
 
-start locator --name=geo_locator --bind-address=127.0.0.1 --J=-Xmx150m \
+start locator --name=geo_locator --bind-address=localhost --J=-Xmx150m \
 --log-level=config --J=-Dlog4j.configurationFile=../config/log4j2.xml \
 --include-system-classpath=true
 
 # start data node1
-start server --name=geo_server1 --locators=127.0.0.1[10334] --bind-address=127.0.0.1 \
+start server --name=geo_server1 --locators="localhost[10334]" --bind-address=localhost \
 --include-system-classpath=true --log-level=config --cache-xml-file=config/cacheSchema.xml \
 --J=-Xmx1024m --J=-Xms1024m --J=-XX:+DisableExplicitGC --J=-XX:+UseConcMarkSweepGC --J=-XX:+UseParNewGC \
 --J=-Dgemfire.QueryService.allowUntrustedMethodInvocation=true --J=-Dlog4j.configurationFile=../config/log4j2.xml \
