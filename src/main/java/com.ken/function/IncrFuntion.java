@@ -1,19 +1,25 @@
 package com.ken.function;
 
 import com.ken.transcation.Example;
-import org.apache.geode.cache.CacheTransactionManager;
-import org.apache.geode.cache.CommitConflictException;
-import org.apache.geode.cache.Region;
+import org.apache.geode.cache.*;
 import org.apache.geode.cache.execute.Function;
 import org.apache.geode.cache.execute.FunctionContext;
 import org.apache.geode.cache.execute.RegionFunctionContext;
 
-public class IncrFuntion implements Function {
+import java.util.Properties;
+
+public class IncrFuntion implements Function, Declarable {
+
+  @Override
+  public void initialize(Cache cache, Properties properties) {
+  }
+
   @Override
   public boolean hasResult() {
     return true;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void execute(FunctionContext context) {
     RegionFunctionContext regionContext = (RegionFunctionContext) context;

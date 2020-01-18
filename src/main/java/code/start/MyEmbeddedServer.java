@@ -1,6 +1,8 @@
 package code.start;
 
+import org.apache.geode.distributed.ConfigurationProperties;
 import org.apache.geode.distributed.ServerLauncher;
+import org.apache.geode.management.internal.cli.i18n.CliStrings;
 
 /*
 System Properties:
@@ -26,8 +28,12 @@ public class MyEmbeddedServer {
     ServerLauncher serverLauncher = new ServerLauncher.Builder()
             .setMemberName("server1")
             .setServerPort(40405)
-            .set("jmx-manager", "true")
-            .set("jmx-manager-start", "true")
+            .set(ConfigurationProperties.LOCATORS, "localhost[10334]")
+            .set(ConfigurationProperties.JMX_MANAGER, "true")
+            .set(ConfigurationProperties.JMX_MANAGER_START, "true")
+            .set(ConfigurationProperties.CACHE_XML_FILE, "config/cacheSheam.xml")
+            .set(ConfigurationProperties.HTTP_SERVICE_PORT, "8888")
+            .set(CliStrings.START_SERVER__REST_API, "true")
             .build();
     serverLauncher.start();
 

@@ -10,8 +10,10 @@ public class Tester {
 
   public static void main(String[] args) {
 
-//    String[] ag = Arrays.<String>asList("connect").toArray();
-    List<String> cmd = Arrays.asList("connect","list members");
+    List<String> cmd = Arrays.asList("-e connect", "-e list members");
     Launcher.main((String[]) cmd.toArray());
+
+//    Stream<String> paths = Arrays.stream(System.getProperty("java.class.path").split(File.pathSeparator));
+//    paths.forEach(System.out::println);
   }
 }

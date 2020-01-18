@@ -26,7 +26,7 @@ task cleanWorkingDir(group: 'geode') {
 
 //http://localhost:7070/pulse/clusterDetail.html
 //http://localhost:8888/geode/swagger-ui.html  
-task start(type: Exec, group: 'geode', dependsOn: [build]) {
+task start(type: Exec, group: 'geode', dependsOn: [build, cleanWorkingDir]) {
   workingDir projectDir
   environment += ['GEODE_HOME': geodeHome, 'PATH': geodeHome, 'CLASSPATH': "${buildDir}/classes/java/main"]
   executable "${geodeHome}/bin/gfsh.bat"

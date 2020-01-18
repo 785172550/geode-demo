@@ -8,14 +8,10 @@
         http://geode.apache.org/schema/lucene/lucene-1.0.xsd" version="1.0" lock-lease="120"
        lock-timeout="60" search-timeout="300" is-server="false" copy-on-read="false">
 
-    <disk-store name="DEFAULT" auto-compact="true" max-oplog-size="1024">
+    <disk-store name="DEFAULT" auto-compact="true" max-oplog-size="256"
+                allow-force-compaction="true">
         <disk-dirs>
             <disk-dir>../data/node1/ds1</disk-dir>
-        </disk-dirs>
-    </disk-store>
-    <disk-store name="ds2" auto-compact="true" max-oplog-size="1024">
-        <disk-dirs>
-            <disk-dir>../data/node1/ds2</disk-dir>
         </disk-dirs>
     </disk-store>
 
@@ -31,7 +27,7 @@
         </pdx-serializer>
     </pdx>
 
-    <region-attributes id="replicated_ds" scope="global" disk-store-name="DEFAULT" disk-synchronous="true"
+    <region-attributes id="replicated_ds" scope="distributed-ack" disk-store-name="DEFAULT" disk-synchronous="true"
                        data-policy="persistent-replicate">
         <!--            <entry-time-to-live>-->
         <!--                <expiration-attributes timeout="60" action="destroy">-->
@@ -45,19 +41,21 @@
         <!--            </entry-time-to-live>-->
     </region-attributes>
 
-    <region-attributes id="partition_ds" disk-store-name="ds2" disk-synchronous="true" data-policy="persistent-partition">
+    <region-attributes id="partition_ds" disk-store-name="DEFAULT" refid="PARTITION_REDUNDANT_OVERFLOW">
         <partition-attributes redundant-copies="1" recovery-delay="10000" startup-recovery-delay="5000" total-num-buckets="3"/>
     </region-attributes>
 
     <region name="Lock" refid="REPLICATE"/>
-    <region name="Country" refid="replicated_ds"/>
-    <region name="School" refid="replicated_ds"/>
-    <region name="Student">
-        <region-attributes refid="replicated_ds">
-        </region-attributes>
+
+    <region name="Country" refid="replicated_ds">
+        <index name="nameIndex" from-clause="/Country" expression="id" key-index="false"/>
     </region>
 
+    <region name="School" refid="partition_ds"/>
+    <region name="Student" refid="partition_ds"/>
+
     <region name="EmployeeData" refid="partition_ds">
+        <!-- key-index="true" -> hash index -->
         <index name="myKeyIndex" from-clause="/EmployeeData" expression="id" key-index="true"/>
         <lucene:index name="name_index">
             <lucene:field name="firstName" analyzer="org.apache.lucene.analysis.core.SimpleAnalyzer"/>
@@ -73,9 +71,15 @@
                 <class-name>org.apache.geode.cache.lucene.FlatFormatSerializer</class-name>
             </lucene:serializer>
         </lucene:index>
-
-        <!--        <index name=""></index>-->
     </region>
 
+    <function-service>
+        <function>
+            <class-name>com.ken.function.CreateRegionFunction</class-name>
+        </function>
+        <function>
+            <class-name>com.ken.function.IncrFuntion</class-name>
+        </function>
+    </function-service>
 
 </cache>
