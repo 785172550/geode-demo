@@ -48,7 +48,7 @@
     <region name="Lock" refid="REPLICATE"/>
 
     <region name="Country" refid="replicated_ds">
-        <index name="nameIndex" from-clause="/Country" expression="id" key-index="false"/>
+        <index name="nameIndex" from-clause="/Country" expression="name" key-index="false"/>
     </region>
 
     <region name="School" refid="partition_ds"/>
@@ -56,7 +56,7 @@
 
     <region name="EmployeeData" refid="partition_ds">
         <!-- key-index="true" -> hash index -->
-        <index name="myKeyIndex" from-clause="/EmployeeData" expression="id" key-index="true"/>
+        <index name="myKeyIndex" from-clause="/EmployeeData" expression="emplNumber" key-index="true"/>
         <lucene:index name="name_index">
             <lucene:field name="firstName" analyzer="org.apache.lucene.analysis.core.SimpleAnalyzer"/>
             <lucene:field name="lastName" analyzer="org.apache.lucene.analysis.core.SimpleAnalyzer"/>
