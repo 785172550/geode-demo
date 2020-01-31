@@ -15,7 +15,7 @@
         </disk-dirs>
     </disk-store>
 
-    <pdx read-serialized="true" persistent="true">
+    <pdx persistent="true">
         <pdx-serializer>
             <class-name>org.apache.geode.pdx.ReflectionBasedAutoSerializer</class-name>
             <parameter name="classes">
@@ -27,7 +27,7 @@
         </pdx-serializer>
     </pdx>
 
-    <region-attributes id="replicated_ds" scope="distributed-ack" disk-store-name="DEFAULT" disk-synchronous="true"
+    <region-attributes id="replicated_ds" scope="global" disk-store-name="DEFAULT" disk-synchronous="false"
                        data-policy="persistent-replicate">
         <!--            <entry-time-to-live>-->
         <!--                <expiration-attributes timeout="60" action="destroy">-->
@@ -52,7 +52,24 @@
     </region>
 
     <region name="School" refid="partition_ds"/>
-    <region name="Student" refid="partition_ds"/>
+    <region name="Student" refid="partition_ds">
+        <region-attributes statistics-enabled="true">
+            <entry-time-to-live>
+                <expiration-attributes timeout="60" action="destroy">
+                    <custom-expiry>
+                        <class-name>com.ken.handler.ExpirationHandler</class-name>
+                        <parameter name="numOfSec">
+                            <string>30</string>
+                        </parameter>
+                    </custom-expiry>
+                </expiration-attributes>
+            </entry-time-to-live>
+            <cache-listener>
+                <class-name>com.ken.listener.DestroyListener</class-name>
+            </cache-listener>
+        </region-attributes>
+    </region>
+    <region name="History_Student" refid="partition_ds"/>
 
     <region name="EmployeeData" refid="partition_ds">
         <!-- key-index="true" -> hash index -->

@@ -63,7 +63,7 @@ task exeGfsh(type: Exec, group: 'geode') {
 task kill(type: Exec, group: 'geode') {
   workingDir projectDir
   executable "tskill"
-  args '9356'
+  args '14120'
 }
 
 task testRun() {

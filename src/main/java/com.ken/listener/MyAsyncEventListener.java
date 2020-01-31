@@ -45,7 +45,9 @@ public class MyAsyncEventListener implements AsyncEventListener {
 //      String json = JSONFormatter.toJSON(instance);
 
     });
-    return false;
+
+    // return false to retry
+    return true;
   }
 
   @Override

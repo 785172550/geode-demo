@@ -154,6 +154,15 @@ public class CacheUtils implements AutoCloseable {
     return null;
   }
 
+  public static CqQuery addCq(CqAttributes attributes, String cqName, String queryStr, String poolName)
+          throws CqException, CqExistsException, RegionNotFoundException {
+
+    CqQuery cqTracker = getOrCreateClient().getQueryService(poolName).newCq(cqName, queryStr, attributes);
+    cqTracker.execute();
+    return cqTracker;
+  }
+
+
   /**
    * @Description: close client cache, keepAlive = false
    */
