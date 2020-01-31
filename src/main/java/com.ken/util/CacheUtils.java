@@ -15,6 +15,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
+import static org.apache.geode.distributed.ConfigurationProperties.DURABLE_CLIENT_ID;
+import static org.apache.geode.distributed.ConfigurationProperties.DURABLE_CLIENT_TIMEOUT;
+
 public class CacheUtils implements AutoCloseable {
   private static Logger logger = LoggerFactory.getLogger(CacheUtils.class);
 
@@ -76,6 +79,21 @@ public class CacheUtils implements AutoCloseable {
     clientCache = new ClientCacheFactory()
             .set("log-level", "WARN")
             .set(ConfigurationProperties.CACHE_XML_FILE, clientFile)
+            .create();
+    return clientCache;
+  }
+
+  public static ClientCache durableClient() {
+    clientCache = new ClientCacheFactory()
+            .set("log-level", "WARN")
+            .set(ConfigurationProperties.CACHE_XML_FILE, clientFile)
+            // Provide a unique identifier for this client's durable subscription message queue
+            .set(DURABLE_CLIENT_ID, "1")
+            // Provide a timeout in seconds for how long the server will wait for the client to reconnect.
+            // If this property isn't set explicitly, it defaults to 300 seconds.
+            .set(DURABLE_CLIENT_TIMEOUT, "200")
+            // This is required so the client can register interest for all keys on this durable client
+            .setPoolSubscriptionEnabled(true)
             .create();
     return clientCache;
   }
