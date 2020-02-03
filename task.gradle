@@ -52,18 +52,18 @@ task stopNode(type: Exec, group: 'geode') {
 
 task exeGfsh(type: Exec, group: 'geode') {
   workingDir projectDir
-  environment 'GEODE_HOME', geodeHome
-  environment 'PATH', geodeHome
+  environment += ['GEODE_HOME': geodeHome, 'PATH': geodeHome, 'CLASSPATH': "${buildDir}/classes/java/main"]
   executable "${geodeHome}/bin/gfsh.bat"
   args = ["-e connect --locator=${locator}",
-          "-e list lucene indexes"]
+          "-e start server --name=geo_server2 --locators=localhost[10334] --include-system-classpath=true " +
+                  "--bind-address=localhost --group=test --cache-xml-file=config/cacheSchema2.xml"]
 //          "-e "]
 }
 
 task kill(type: Exec, group: 'geode') {
   workingDir projectDir
   executable "tskill"
-  args '14120'
+  args '20308'
 }
 
 task testRun() {

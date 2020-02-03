@@ -10,7 +10,7 @@ start server --name=geo_server1 --locators="localhost[10334]" --bind-address=loc
 --J=-Xmx1024m --J=-Xms1024m --J=-XX:+DisableExplicitGC --J=-XX:+UseConcMarkSweepGC --J=-XX:+UseParNewGC \
 --J=-Dgemfire.QueryService.allowUntrustedMethodInvocation=true --J=-Dlog4j.configurationFile=../config/log4j2.xml \
 --start-rest-api=true --http-service-port=8888  --server-port=40001 \
---enable-time-statistics --statistic-archive-file=lucene1.gfs
+--enable-time-statistics --statistic-archive-file=lucene1.gfs --group=test
 
 # start data node2
 #start server --name=geo_server2 --locators=127.0.0.1[10334] --bind-address=127.0.0.1 \

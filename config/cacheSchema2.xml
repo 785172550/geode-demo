@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="http://geode.apache.org/schema/cache"
-       xsi:schemaLocation="http://geode.apache.org/schema/cache http://geode.apache.org/schema/cache/cache-1.0.xsd" version="1.0" lock-lease="120"
+<cache xmlns="http://geode.apache.org/schema/cache"
+       xmlns:lucene="http://geode.apache.org/schema/lucene"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://geode.apache.org/schema/cache
+        http://geode.apache.org/schema/cache/cache-1.0.xsd
+        http://geode.apache.org/schema/lucene
+        http://geode.apache.org/schema/lucene/lucene-1.0.xsd" version="1.0" lock-lease="120"
        lock-timeout="60" search-timeout="300" is-server="false" copy-on-read="false">
 
-    <disk-store name="DEFAULT" auto-compact="true" max-oplog-size="1024">
+    <disk-store name="DEFAULT" auto-compact="true" max-oplog-size="256"
+                allow-force-compaction="true">
         <disk-dirs>
             <disk-dir>../data/node2/ds1</disk-dir>
         </disk-dirs>
     </disk-store>
 
-    <pdx read-serialized="true" persistent="true">
+    <pdx persistent="true">
         <pdx-serializer>
             <class-name>org.apache.geode.pdx.ReflectionBasedAutoSerializer</class-name>
             <parameter name="classes">
@@ -22,35 +27,66 @@
         </pdx-serializer>
     </pdx>
 
-    <region-attributes id="replicated_ds" scope="global" disk-store-name="DEFAULT"
-                       disk-synchronous="true" data-policy="persistent-replicate">
-        <!--            <entry-time-to-live>-->
-        <!--                <expiration-attributes timeout="60" action="destroy">-->
-        <!--                    <custom-expiry>-->
-        <!--                        <class-name>com.ken.handler</class-name>-->
-        <!--                        <parameter name="numOfDay">-->
-        <!--                            <string>30</string>-->
-        <!--                        </parameter>-->
-        <!--                    </custom-expiry>-->
-        <!--                </expiration-attributes>-->
-        <!--            </entry-time-to-live>-->
+    <region-attributes id="replicated_ds" scope="global" disk-store-name="DEFAULT" disk-synchronous="false"
+                       data-policy="persistent-replicate">
     </region-attributes>
 
-    <region-attributes id="partition_ds" refid="PARTITION_PERSISTENT" disk-store-name="DEFAULT" disk-synchronous="true" data-policy="persistent-partition">
+    <region-attributes id="partition_ds" disk-store-name="DEFAULT" refid="PARTITION_REDUNDANT_PERSISTENT_OVERFLOW">
         <partition-attributes redundant-copies="1" recovery-delay="10000" startup-recovery-delay="5000" total-num-buckets="3"/>
     </region-attributes>
 
+    <region name="Lock" refid="REPLICATE"/>
 
-    <region name="Country" refid="replicated_ds"/>
-    <region name="School" refid="replicated_ds"/>
-    <region name="Student">
-        <region-attributes refid="replicated_ds">
-        </region-attributes>
+    <region name="Country" refid="replicated_ds">
+        <index name="nameIndex" from-clause="/Country" expression="name" key-index="false"/>
     </region>
 
-    <region name="EmployeeData" refid="replicated_ds">
-        <region-attributes index-update-type="asynchronous">
+    <region name="School" refid="partition_ds"/>
+    <region name="Student" refid="partition_ds">
+        <region-attributes statistics-enabled="true">
+            <entry-time-to-live>
+                <expiration-attributes timeout="60" action="destroy">
+                    <custom-expiry>
+                        <class-name>com.ken.handler.ExpirationHandler</class-name>
+                        <parameter name="numOfSec">
+                            <string>30</string>
+                        </parameter>
+                    </custom-expiry>
+                </expiration-attributes>
+            </entry-time-to-live>
+            <cache-listener>
+                <class-name>com.ken.listener.DestroyListener</class-name>
+            </cache-listener>
         </region-attributes>
     </region>
+    <region name="History_Student" refid="partition_ds"/>
+
+    <region name="EmployeeData" refid="partition_ds">
+        <!-- key-index="true" -> hash index -->
+        <index name="myKeyIndex" from-clause="/EmployeeData" expression="emplNumber" key-index="true"/>
+        <lucene:index name="name_index">
+            <lucene:field name="firstName" analyzer="org.apache.lucene.analysis.core.SimpleAnalyzer"/>
+            <lucene:field name="lastName" analyzer="org.apache.lucene.analysis.core.SimpleAnalyzer"/>
+        </lucene:index>
+        <lucene:index name="analyzerIndex">
+            <lucene:field name="lastName" analyzer="org.apache.lucene.analysis.core.KeywordAnalyzer"/>
+            <lucene:field name="email" analyzer="org.apache.lucene.analysis.core.KeywordAnalyzer"/>
+        </lucene:index>
+        <lucene:index name="nestedObjectIndex">
+            <lucene:field name="contacts.phoneNumbers" analyzer="org.apache.lucene.analysis.core.KeywordAnalyzer"/>
+            <lucene:serializer>
+                <class-name>org.apache.geode.cache.lucene.FlatFormatSerializer</class-name>
+            </lucene:serializer>
+        </lucene:index>
+    </region>
+
+    <function-service>
+        <function>
+            <class-name>com.ken.function.CreateRegionFunction</class-name>
+        </function>
+        <function>
+            <class-name>com.ken.function.IncrFuntion</class-name>
+        </function>
+    </function-service>
 
 </cache>
