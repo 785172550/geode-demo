@@ -44,4 +44,7 @@ dependencies {
   testCompile "com.github.stefanbirkner:system-rules:$systemrulesVersion"
   testCompile "org.assertj:assertj-core:$assertjVersion"
   testCompile "junit:junit:$junitVersion"
+  
+  testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+  testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 }
