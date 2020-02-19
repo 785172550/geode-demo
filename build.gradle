@@ -9,6 +9,8 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = 1.8
 def geodeHome = "C:/Users/kenneth/geode/apache-geode-${geodeVersion}"
 
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
 repositories {
   mavenLocal()
   maven {
@@ -33,7 +35,7 @@ dependencies {
   compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
   runtime "org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion"
   compile "net.java.dev.jna:jna:4.1.0"
-  
+
   compile "org.apache.geode:geode-core:$geodeVersion"
   compile "org.apache.geode:geode-cq:$geodeVersion"
   compile "org.apache.geode:geode-lucene:$geodeVersion"
@@ -44,7 +46,16 @@ dependencies {
   testCompile "com.github.stefanbirkner:system-rules:$systemrulesVersion"
   testCompile "org.assertj:assertj-core:$assertjVersion"
   testCompile "junit:junit:$junitVersion"
-  
+
   testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
   testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+}
+
+sourceSets {
+  main {
+    java { srcDirs = ['src/main/java'] }
+  }
+  test {
+    java { srcDirs = ['src/test/java'] }
+  }
 }

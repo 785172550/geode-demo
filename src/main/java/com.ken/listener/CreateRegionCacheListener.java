@@ -41,6 +41,7 @@ public class CreateRegionCacheListener extends CacheListenerAdapter<String, Regi
                 + region);
       }
       logger.info("CreateRegionCacheListener created: {}", region);
-    } catch (RegionExistsException e) {/* ignore */}
+    } catch (RegionExistsException ignore) {
+    }
   }
 }

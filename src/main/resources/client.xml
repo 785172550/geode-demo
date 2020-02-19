@@ -29,5 +29,5 @@
     <region name="Student" refid="PROXY1"/>
     <region name="EmployeeData" refid="PROXY1"/>
     <region name="Team" refid="PROXY1"/>
-
+    <region name="Trade" refid="PROXY1"/>
 </client-cache>

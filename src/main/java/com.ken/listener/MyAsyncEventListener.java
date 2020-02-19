@@ -6,7 +6,6 @@ import org.apache.geode.cache.asyncqueue.AsyncEvent;
 import org.apache.geode.cache.asyncqueue.AsyncEventListener;
 import org.apache.geode.cache.wan.EventSequenceID;
 import org.apache.geode.internal.logging.LogService;
-import org.apache.geode.pdx.JSONFormatter;
 import org.apache.geode.pdx.PdxInstance;
 import org.apache.logging.log4j.Logger;
 
@@ -52,11 +51,9 @@ public class MyAsyncEventListener implements AsyncEventListener {
 
   @Override
   public void initialize(Cache cache, Properties properties) {
-
   }
 
   @Override
   public void close() {
-
   }
 }
