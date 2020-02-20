@@ -6,7 +6,6 @@ import org.apache.geode.cache.Region;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressWarnings("unchecked")
 public class TestConnection {
   private static Logger logger = LoggerFactory.getLogger(TestConnection.class);
 

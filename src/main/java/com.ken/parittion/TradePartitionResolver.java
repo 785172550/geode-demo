@@ -12,7 +12,7 @@ import java.util.Properties;
 // StringPrefixPartitionResolver
 public class TradePartitionResolver implements PartitionResolver<String, Trade> {
 
-  Cache cache;
+  private Cache cache;
   private static final Logger logger = LogService.getLogger();
 
   @Override

@@ -15,6 +15,7 @@ public class PartitionDemo {
 
 //    trades.removeAll(trades.keySetOnServer());
 //    putData(trades);
+    trades.getAll(trades.keySetOnServer()).forEach((k, v) -> System.out.println(k));
   }
 
   private static void putData(Region<String, Trade> trades) {
