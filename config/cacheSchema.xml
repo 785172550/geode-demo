@@ -82,15 +82,15 @@
         </lucene:index>
     </region>
 
-    <region name="Trade" refid="PARTITION_REDUNDANT_PERSISTENT_OVERFLOW">
-        <region-attributes>
-            <partition-attributes redundant-copies="1">
-                <partition-resolver>
-                    <class-name>com.ken.parittion.TradePartitionResolver</class-name>
-                </partition-resolver>
-            </partition-attributes>
-        </region-attributes>
-    </region>
+<!--    <region name="Trade" refid="PARTITION_REDUNDANT_PERSISTENT_OVERFLOW">-->
+<!--        <region-attributes>-->
+<!--            <partition-attributes redundant-copies="1">-->
+<!--                <partition-resolver>-->
+<!--                    <class-name>com.ken.parittion.TradePartitionResolver</class-name>-->
+<!--                </partition-resolver>-->
+<!--            </partition-attributes>-->
+<!--        </region-attributes>-->
+<!--    </region>-->
 
     <function-service>
         <function>

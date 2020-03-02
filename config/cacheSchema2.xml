@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cache xmlns="http://geode.apache.org/schema/cache"
-       xmlns:lucene="http://geode.apache.org/schema/lucene"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://geode.apache.org/schema/cache
-        http://geode.apache.org/schema/cache/cache-1.0.xsd
-        http://geode.apache.org/schema/lucene
-        http://geode.apache.org/schema/lucene/lucene-1.0.xsd" version="1.0" lock-lease="120"
+        http://geode.apache.org/schema/cache/cache-1.0.xsd" version="1.0" lock-lease="120"
        lock-timeout="60" search-timeout="300" is-server="false" copy-on-read="false">
 
     <disk-store name="DEFAULT" auto-compact="true" max-oplog-size="256"
@@ -35,58 +32,61 @@
         <partition-attributes redundant-copies="1" recovery-delay="10000" startup-recovery-delay="5000" total-num-buckets="3"/>
     </region-attributes>
 
-    <region name="Lock" refid="REPLICATE"/>
-
-    <region name="Country" refid="replicated_ds">
-        <index name="nameIndex" from-clause="/Country" expression="name" key-index="false"/>
+    <region name="Test" refid="replicated_ds">
     </region>
 
-    <region name="School" refid="partition_ds"/>
-    <region name="Student" refid="partition_ds">
-        <region-attributes statistics-enabled="true">
-            <entry-time-to-live>
-                <expiration-attributes timeout="60" action="destroy">
-                    <custom-expiry>
-                        <class-name>com.ken.handler.ExpirationHandler</class-name>
-                        <parameter name="numOfSec">
-                            <string>30</string>
-                        </parameter>
-                    </custom-expiry>
-                </expiration-attributes>
-            </entry-time-to-live>
-            <cache-listener>
-                <class-name>com.ken.listener.DestroyListener</class-name>
-            </cache-listener>
-        </region-attributes>
-    </region>
-    <region name="History_Student" refid="partition_ds"/>
+    <!--    <region name="Lock" refid="REPLICATE"/>-->
 
-    <region name="EmployeeData" refid="partition_ds">
-        <!-- key-index="true" -> hash index -->
-        <index name="myKeyIndex" from-clause="/EmployeeData" expression="emplNumber" key-index="true"/>
-        <lucene:index name="name_index">
-            <lucene:field name="firstName" analyzer="org.apache.lucene.analysis.core.SimpleAnalyzer"/>
-            <lucene:field name="lastName" analyzer="org.apache.lucene.analysis.core.SimpleAnalyzer"/>
-        </lucene:index>
-        <lucene:index name="analyzerIndex">
-            <lucene:field name="lastName" analyzer="org.apache.lucene.analysis.core.KeywordAnalyzer"/>
-            <lucene:field name="email" analyzer="org.apache.lucene.analysis.core.KeywordAnalyzer"/>
-        </lucene:index>
-        <lucene:index name="nestedObjectIndex">
-            <lucene:field name="contacts.phoneNumbers" analyzer="org.apache.lucene.analysis.core.KeywordAnalyzer"/>
-            <lucene:serializer>
-                <class-name>org.apache.geode.cache.lucene.FlatFormatSerializer</class-name>
-            </lucene:serializer>
-        </lucene:index>
-    </region>
+    <!--    <region name="Country" refid="replicated_ds">-->
+    <!--        <index name="nameIndex" from-clause="/Country" expression="name" key-index="false"/>-->
+    <!--    </region>-->
 
-    <function-service>
-        <function>
-            <class-name>com.ken.function.CreateRegionFunction</class-name>
-        </function>
-        <function>
-            <class-name>com.ken.function.IncrFuntion</class-name>
-        </function>
-    </function-service>
+    <!--    <region name="School" refid="partition_ds"/>-->
+    <!--    <region name="Student" refid="partition_ds">-->
+    <!--        <region-attributes statistics-enabled="true">-->
+    <!--            <entry-time-to-live>-->
+    <!--                <expiration-attributes timeout="60" action="destroy">-->
+    <!--                    <custom-expiry>-->
+    <!--                        <class-name>com.ken.handler.ExpirationHandler</class-name>-->
+    <!--                        <parameter name="numOfSec">-->
+    <!--                            <string>30</string>-->
+    <!--                        </parameter>-->
+    <!--                    </custom-expiry>-->
+    <!--                </expiration-attributes>-->
+    <!--            </entry-time-to-live>-->
+    <!--            <cache-listener>-->
+    <!--                <class-name>com.ken.listener.DestroyListener</class-name>-->
+    <!--            </cache-listener>-->
+    <!--        </region-attributes>-->
+    <!--    </region>-->
+    <!--    <region name="History_Student" refid="partition_ds"/>-->
+
+    <!--    <region name="EmployeeData" refid="partition_ds">-->
+    <!--        &lt;!&ndash; key-index="true" -> hash index &ndash;&gt;-->
+    <!--        <index name="myKeyIndex" from-clause="/EmployeeData" expression="emplNumber" key-index="true"/>-->
+    <!--        <lucene:index name="name_index">-->
+    <!--            <lucene:field name="firstName" analyzer="org.apache.lucene.analysis.core.SimpleAnalyzer"/>-->
+    <!--            <lucene:field name="lastName" analyzer="org.apache.lucene.analysis.core.SimpleAnalyzer"/>-->
+    <!--        </lucene:index>-->
+    <!--        <lucene:index name="analyzerIndex">-->
+    <!--            <lucene:field name="lastName" analyzer="org.apache.lucene.analysis.core.KeywordAnalyzer"/>-->
+    <!--            <lucene:field name="email" analyzer="org.apache.lucene.analysis.core.KeywordAnalyzer"/>-->
+    <!--        </lucene:index>-->
+    <!--        <lucene:index name="nestedObjectIndex">-->
+    <!--            <lucene:field name="contacts.phoneNumbers" analyzer="org.apache.lucene.analysis.core.KeywordAnalyzer"/>-->
+    <!--            <lucene:serializer>-->
+    <!--                <class-name>org.apache.geode.cache.lucene.FlatFormatSerializer</class-name>-->
+    <!--            </lucene:serializer>-->
+    <!--        </lucene:index>-->
+    <!--    </region>-->
+
+    <!--    <function-service>-->
+    <!--        <function>-->
+    <!--            <class-name>com.ken.function.CreateRegionFunction</class-name>-->
+    <!--        </function>-->
+    <!--        <function>-->
+    <!--            <class-name>com.ken.function.IncrFuntion</class-name>-->
+    <!--        </function>-->
+    <!--    </function-service>-->
 
 </cache>

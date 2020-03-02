@@ -4,11 +4,15 @@
               xsi:schemaLocation="http://geode.apache.org/schema/cache http://geode.apache.org/schema/cache/cache-1.0.xsd"
               version="1.0">
 
-    <pool name="clientPool" subscription-enabled="true" read-timeout="120000000" max-connections="10">
+    <pool name="clientPool" subscription-enabled="true" read-timeout="120000000" max-connections="10" server-group="test">
         <locator host="localhost" port="10334"/>
         <!--        <locator host="oceanap01d.nam.nsroot.net" port="10334"/>-->
         <!--        <server host="oceanap01d.nam.nsroot.net" port="30333"/>-->
         <!--        <server host="oceanap02d.nam.nsroot.net" port="30334"/>-->
+    </pool>
+
+    <pool name="test2" subscription-enabled="true" read-timeout="120000000" max-connections="10" server-group="test2">
+        <locator host="localhost" port="10334"/>
     </pool>
 
     <pdx>
@@ -30,4 +34,7 @@
     <region name="EmployeeData" refid="PROXY1"/>
     <region name="Team" refid="PROXY1"/>
     <region name="Trade" refid="PROXY1"/>
+    <region name="Test">
+        <region-attributes pool-name="test2"/>
+    </region>
 </client-cache>

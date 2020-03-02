@@ -19,10 +19,12 @@ public class TestConnection {
     CacheUtils.plainClient();
 
     // test country
-    Region<String, Country> country = CacheUtils.getRegion("Country");
+    Region<String, String> region = CacheUtils.getRegion("Test");
+
+    region.put("test", "test value is 好多了");
 
 //    country.put(china.getName(), china);
-    country.keySetOnServer().forEach(k -> logger.info(country.get(k).toString()));
+    region.keySetOnServer().forEach(k -> logger.info(region.get(k).toString()));
 
   }
 

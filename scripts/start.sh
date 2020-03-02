@@ -13,11 +13,11 @@ start server --name=geo_server1 --locators="localhost[10334]" --bind-address=loc
 --enable-time-statistics --statistic-archive-file=lucene1.gfs --group=test
 
 # start data node2
-#start server --name=geo_server2 --locators=127.0.0.1[10334] --bind-address=127.0.0.1 \
-#--include-system-classpath=true --log-level=config --cache-xml-file=config/cacheSchema2.xml \
-#--J=-Xmx1024m --J=-Xms1024m --J=-XX:+DisableExplicitGC --J=-XX:+UseConcMarkSweepGC --J=-XX:+UseParNewGC \
-#--J=-Dgemfire.QueryService.allowUntrustedMethodInvocation=true --J=-Dlog4j.configurationFile=../config/log4j2.xml \
-#--server-port=40002
+start server --name=geo_server2 --locators=127.0.0.1[10334] --bind-address=127.0.0.1 \
+--include-system-classpath=true --log-level=config --cache-xml-file=config/cacheSchema2.xml \
+--J=-Xmx1024m --J=-Xms1024m --J=-XX:+DisableExplicitGC --J=-XX:+UseConcMarkSweepGC --J=-XX:+UseParNewGC \
+--J=-Dgemfire.QueryService.allowUntrustedMethodInvocation=true --J=-Dlog4j.configurationFile=../config/log4j2.xml \
+--server-port=40002 --group=test2
 
 #list members
 #list region
