@@ -27,7 +27,7 @@
         </pdx-serializer>
     </pdx>
 
-    <region-attributes id="replicated_ds" scope="global" disk-store-name="DEFAULT" disk-synchronous="false"
+    <region-attributes id="replicated_ds" scope="distributed-ack" disk-store-name="DEFAULT" disk-synchronous="false"
                        data-policy="persistent-replicate">
     </region-attributes>
 
@@ -38,7 +38,11 @@
     <region name="Lock" refid="REPLICATE"/>
 
     <region name="Country" refid="replicated_ds">
-        <index name="nameIndex" from-clause="/Country" expression="name" key-index="false"/>
+        <index name="nameIndex" from-clause="/Country" expression="name" key-index="false">
+        </index>
+    </region>
+
+    <region name="Country2" refid="REPLICATE">
     </region>
 
     <region name="School" refid="partition_ds"/>
