@@ -71,8 +71,9 @@ public class CreateRegionFunction implements Function, Declarable {
     return metaRegion;
   }
 
+  @Override
   public String getId() {
-    return getClass().getSimpleName();
+    return CreateRegionFunction.class.getSimpleName();
   }
 
   public boolean optimizeForWrite() {

@@ -42,22 +42,13 @@ task stop(type: Exec, group: 'geode') {
 //  args = ["-e connect --locator=127.0.0.1[10334]", "-e shutdown --include-locators=true"]
 }
 
+def member_name = 'geo_server2'
 task stopNode(type: Exec, group: 'geode') {
   workingDir projectDir
   environment 'GEODE_HOME', geodeHome
   environment 'PATH', geodeHome
   executable "${geodeHome}/bin/gfsh.bat"
-  args = ["-e connect --locator=${locator}", "-e stop server --name=geo_server2"]
-}
-
-task exeGfsh(type: Exec, group: 'geode') {
-  workingDir projectDir
-  environment += ['GEODE_HOME': geodeHome, 'PATH': geodeHome, 'CLASSPATH': "${buildDir}/classes/java/main"]
-  executable "${geodeHome}/bin/gfsh.bat"
-  args = ["-e connect --locator=${locator}",
-          "-e start server --name=geo_server2 --locators=localhost[10334] --include-system-classpath=true " +
-                  "--bind-address=localhost --group=test --cache-xml-file=config/cacheSchema2.xml"]
-//          "-e "]
+  args = ["-e connect --locator=${locator}", "-e stop server --name=${member_name}"]
 }
 
 task kill(type: Exec, group: 'geode') {
@@ -65,6 +56,19 @@ task kill(type: Exec, group: 'geode') {
   executable "tskill"
   args '12284'
 }
+
+def command1 = '''
+-e start server --name=geo_server2 --locators=localhost[10334] --include-system-classpath=true
+ --bind-address=localhost --group=test --cache-xml-file=config/cacheSchema2.xml
+'''
+task exeGfsh(type: Exec, group: 'geode') {
+  workingDir projectDir
+  environment += ['GEODE_HOME': geodeHome, 'PATH': geodeHome, 'CLASSPATH': "${buildDir}/classes/java/main"]
+  executable "${geodeHome}/bin/gfsh.bat"
+  args = ["-e connect --locator=${locator}", command1]
+//          "-e "]
+}
+
 
 task testRun() {
   doLast {

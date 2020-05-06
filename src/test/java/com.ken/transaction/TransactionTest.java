@@ -9,6 +9,8 @@ import org.apache.geode.cache.client.ClientCache;
 
 /**
  * --J=-Dgemfire.ALLOW_PERSISTENT_TRANSACTIONS=true
+ *
+ * geode Transaction is SSI 乐观冲突检测 基于线程ID
  */
 public class TransactionTest {
 

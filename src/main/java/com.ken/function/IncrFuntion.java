@@ -55,7 +55,7 @@ public class IncrFuntion implements Function, Declarable {
 
   @Override
   public String getId() {
-    return IncrFuntion.class.getCanonicalName();
+    return IncrFuntion.class.getSimpleName();
   }
 
   /**

@@ -32,7 +32,7 @@
     </region-attributes>
 
     <region-attributes id="partition_ds" disk-store-name="DEFAULT" refid="PARTITION_REDUNDANT_PERSISTENT_OVERFLOW">
-        <partition-attributes redundant-copies="1" recovery-delay="10000" startup-recovery-delay="5000" total-num-buckets="3"/>
+        <partition-attributes redundant-copies="1" recovery-delay="10000" startup-recovery-delay="5000" total-num-buckets="7"/>
     </region-attributes>
 
     <region name="Lock" refid="REPLICATE"/>
@@ -42,12 +42,10 @@
         </index>
     </region>
 
-    <region name="Country2" refid="REPLICATE">
-    </region>
-
     <region name="School" refid="partition_ds"/>
     <region name="Student" refid="partition_ds">
         <region-attributes statistics-enabled="true">
+            <!-- <entry-idle-time>  idle time 会在每次读写是reset计时器，time to live 只是第一次写入设置计时器 -->
             <entry-time-to-live>
                 <expiration-attributes timeout="60" action="destroy">
                     <custom-expiry>
@@ -86,15 +84,15 @@
         </lucene:index>
     </region>
 
-<!--    <region name="Trade" refid="PARTITION_REDUNDANT_PERSISTENT_OVERFLOW">-->
-<!--        <region-attributes>-->
-<!--            <partition-attributes redundant-copies="1">-->
-<!--                <partition-resolver>-->
-<!--                    <class-name>com.ken.parittion.TradePartitionResolver</class-name>-->
-<!--                </partition-resolver>-->
-<!--            </partition-attributes>-->
-<!--        </region-attributes>-->
-<!--    </region>-->
+    <region name="Trade" refid="PARTITION_REDUNDANT_PERSISTENT_OVERFLOW">
+        <region-attributes>
+            <partition-attributes redundant-copies="1">
+                <partition-resolver>
+                    <class-name>com.ken.parittion.TradePartitionResolver</class-name>
+                </partition-resolver>
+            </partition-attributes>
+        </region-attributes>
+    </region>
 
     <function-service>
         <function>
@@ -102,6 +100,9 @@
         </function>
         <function>
             <class-name>com.ken.function.IncrFuntion</class-name>
+        </function>
+        <function>
+            <class-name>com.ken.function.PartitionFunction</class-name>
         </function>
     </function-service>
 

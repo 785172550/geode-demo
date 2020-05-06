@@ -6,6 +6,9 @@ import org.apache.geode.cache.CacheTransactionManager;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 
+/*
+Transaction 2
+ */
 public class T2 {
 
   public static void main(String[] args) {
@@ -17,10 +20,9 @@ public class T2 {
 //    cacheTransactionManager.begin();
     Country country = (Country) region.get("china");
 
-//    country.setCapitol("new tow");
+    country.setCapitol("new tow");
     System.out.println(country.getCapitol());
-//    region.put(country.getName(), country);
-
+    region.put(country.getName(), country);
     System.out.println("update ------- ");
 //    cacheTransactionManager.commit();
   }
